@@ -17,7 +17,8 @@ function sortRepos(repos, sort) {
 }
 
 function App() {
-  const { user, repos, status, error, search } = useGithubUser();
+  const { user, repos, status, error, hasMore, loadingMore, search, loadMore } =
+    useGithubUser();
   const [sort, setSort] = useState('updated');
 
   const sortedRepos = useMemo(() => sortRepos(repos, sort), [repos, sort]);
@@ -41,11 +42,29 @@ function App() {
           {status === 'success' && user && (
             <div className="grid gap-6">
               <ProfileCard user={user} />
+
               <div className="flex items-center justify-between">
-                <h3 className="font-semibold">Repositories</h3>
+                <h3 className="font-semibold">
+                  Repositories{' '}
+                  <span className="text-gray-400">
+                    ({repos.length} of {user.publicRepos})
+                  </span>
+                </h3>
                 <SortControls value={sort} onChange={setSort} />
               </div>
-              <RepoList repos={sortedRepos} />
+
+              <RepoList owner={user.login} repos={sortedRepos} />
+
+              {hasMore && (
+                <button
+                  type="button"
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                  className="mx-auto rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+                >
+                  {loadingMore ? 'Loading…' : 'Load more'}
+                </button>
+              )}
             </div>
           )}
         </div>
