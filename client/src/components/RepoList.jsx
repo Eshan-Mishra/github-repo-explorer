@@ -1,6 +1,6 @@
 import RepoCard from './RepoCard';
 
-function RepoList({ repos }) {
+function RepoList({ owner, repos }) {
   if (repos.length === 0) {
     return <p className="text-gray-500">This user has no public repositories.</p>;
   }
@@ -8,7 +8,7 @@ function RepoList({ repos }) {
   return (
     <ul className="grid gap-3">
       {repos.map((repo) => (
-        <RepoCard key={repo.id} repo={repo} />
+        <RepoCard key={repo.id} owner={owner} repo={repo} />
       ))}
     </ul>
   );
