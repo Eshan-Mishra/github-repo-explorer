@@ -1,11 +1,7 @@
-import { useState } from 'react';
-
-function SearchBar({ onSearch, loading }) {
-  const [value, setValue] = useState('');
-
+function SearchBar({ value, onChange, onSubmit, loading }) {
   function handleSubmit(event) {
     event.preventDefault();
-    onSearch(value);
+    onSubmit();
   }
 
   return (
@@ -13,7 +9,7 @@ function SearchBar({ onSearch, loading }) {
       <input
         type="text"
         value={value}
-        onChange={(event) => setValue(event.target.value)}
+        onChange={(event) => onChange(event.target.value)}
         placeholder="Enter a GitHub username…"
         aria-label="GitHub username"
         className="flex-1 rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none focus:border-gray-500"

@@ -1,7 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useGithubUser } from './hooks/useGithubUser';
+import { useDebounce } from './hooks/useDebounce';
+import { useRecentSearches } from './hooks/useRecentSearches';
 import SearchBar from './components/SearchBar';
+import RecentSearches from './components/RecentSearches';
 import ProfileCard from './components/ProfileCard';
+import LanguageChart from './components/LanguageChart';
 import RepoList from './components/RepoList';
 import SortControls from './components/SortControls';
 import Loading from './components/Loading';
@@ -19,7 +23,21 @@ function sortRepos(repos, sort) {
 function App() {
   const { user, repos, status, error, hasMore, loadingMore, search, loadMore } =
     useGithubUser();
+  const [query, setQuery] = useState('');
   const [sort, setSort] = useState('updated');
+
+  const debouncedQuery = useDebounce(query, 500);
+  const { items: recent, add: addRecent, clear: clearRecent } = useRecentSearches();
+
+  // Search-as-you-type: run a search once typing settles.
+  useEffect(() => {
+    if (debouncedQuery.trim()) search(debouncedQuery);
+  }, [debouncedQuery, search]);
+
+  // Remember successful searches.
+  useEffect(() => {
+    if (status === 'success' && user) addRecent(user.login);
+  }, [status, user, addRecent]);
 
   const sortedRepos = useMemo(() => sortRepos(repos, sort), [repos, sort]);
 
@@ -33,7 +51,13 @@ function App() {
           </p>
         </header>
 
-        <SearchBar onSearch={search} loading={status === 'loading'} />
+        <SearchBar
+          value={query}
+          onChange={setQuery}
+          onSubmit={() => search(query)}
+          loading={status === 'loading'}
+        />
+        <RecentSearches items={recent} onSelect={setQuery} onClear={clearRecent} />
 
         <div className="mt-6">
           {status === 'idle' && <EmptyState />}
@@ -42,6 +66,7 @@ function App() {
           {status === 'success' && user && (
             <div className="grid gap-6">
               <ProfileCard user={user} />
+              <LanguageChart repos={repos} />
 
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold">
