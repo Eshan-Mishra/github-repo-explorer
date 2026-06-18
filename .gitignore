@@ -4,3 +4,4 @@ node_modules/
 dist/
 docs/
 Assessment for Full Stack Developer.pdf
+.claude/
