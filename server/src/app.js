@@ -6,7 +6,13 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-app.use(cors());
+// Allow all origins by default; in production set CORS_ORIGIN to the frontend
+// URL (comma-separated for more than one).
+const corsOptions = process.env.CORS_ORIGIN
+  ? { origin: process.env.CORS_ORIGIN.split(',').map((origin) => origin.trim()) }
+  : {};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.get('/api/health', (req, res) => {
