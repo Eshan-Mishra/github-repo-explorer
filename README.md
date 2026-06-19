@@ -9,8 +9,13 @@ deployment.
 
 ## Live Demo
 
-- **Frontend:** _added after deployment_
-- **Backend:** _added after deployment_
+- **Frontend (Vercel):** https://client-blush-nu-33.vercel.app
+- **Backend (Render):** https://github-repo-explorer-5afv.onrender.com
+
+> The backend runs on Render's free tier, which spins down when idle — the first
+> request after a quiet period cold-starts in ~30–60 seconds. A `GITHUB_TOKEN` is
+> set server-side so the deployed app uses GitHub's authenticated rate limit
+> rather than the shared free-tier IP's 60/hour.
 
 ## Tech Stack
 
