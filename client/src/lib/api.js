@@ -34,3 +34,8 @@ export function getRepo(owner, repo) {
     `/api/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`
   );
 }
+
+// Fire-and-forget; used to keep the free-tier backend awake.
+export function pingHealth() {
+  return fetch(`${BASE_URL}/api/health`).catch(() => {});
+}
