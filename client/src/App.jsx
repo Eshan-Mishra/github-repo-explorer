@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useGithubUser } from './hooks/useGithubUser';
 import { useDebounce } from './hooks/useDebounce';
 import { useRecentSearches } from './hooks/useRecentSearches';
+import { useKeepAlive } from './hooks/useKeepAlive';
 import SearchBar from './components/SearchBar';
 import RecentSearches from './components/RecentSearches';
 import ProfileCard from './components/ProfileCard';
@@ -28,6 +29,8 @@ function App() {
 
   const debouncedQuery = useDebounce(query, 500);
   const { items: recent, add: addRecent, clear: clearRecent } = useRecentSearches();
+
+  useKeepAlive();
 
   // Search-as-you-type: run a search once typing settles.
   useEffect(() => {

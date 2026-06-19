@@ -13,9 +13,11 @@ deployment.
 - **Backend (Render):** https://github-repo-explorer-5afv.onrender.com
 
 > The backend runs on Render's free tier, which spins down when idle — the first
-> request after a quiet period cold-starts in ~30–60 seconds. A `GITHUB_TOKEN` is
-> set server-side so the deployed app uses GitHub's authenticated rate limit
-> rather than the shared free-tier IP's 60/hour.
+> request after a quiet period cold-starts in ~30–60 seconds. While the app is
+> open, the frontend pings `/api/health` every 10 minutes to keep the backend
+> awake during a session. A `GITHUB_TOKEN` is set server-side so the deployed app
+> uses GitHub's authenticated rate limit rather than the shared free-tier IP's
+> 60/hour.
 
 ## Tech Stack
 
